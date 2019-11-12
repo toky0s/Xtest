@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Test name",
+        "school": "School name",
+        "args": "args"
+    },
+    {
+        "1":"A",
+        "2":"B",
+        "3":"C"
+    }
+]
