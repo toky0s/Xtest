@@ -6,26 +6,6 @@ import os
 from PIL import Image, ImageTk
 
 
-class FrameGroupRadiobutton(Frame):
-
-    def __init__(self, master=None, side='left', variable=None, dict_option={}, initialize="", callback=None):
-        super().__init__(master=master)
-        self.side = side
-        self.variable = variable
-        self.dict_option = dict_option
-        self.initialize = initialize
-        self.command = callback
-        self.setupUI()
-
-    def setupUI(self):
-
-        self.variable.set(self.initialize)  # initialize
-        for text, value in self.dict_option.items():
-            radiobt_quality = Radiobutton(
-                self, text=text, variable=self.variable, value=value, command=self.command)
-            radiobt_quality.pack(side=self.side, anchor='w')
-
-
 class InformationExam(Frame):
 
     def __init__(self, **kw):
@@ -111,37 +91,48 @@ class CenterExam(Frame):
     # mac dinh data da duoc conver tu json sang object
     def __init__(self, master, **kw):
         super().__init__(master=master)
+        self.master = master
         self.data = kw['data']
 
         self.data_client_edit = {}
         self.len_questions = len(self.data['questions'])
 
-        self.data_client_edit['questions'] = []
-        for i in range(self.len_questions):
-            self.data_client_edit['questions'].append(
-                {"state": "no", "answer": ""})
+        self.data_client_edit['questions'] = [{"state": "no", "answer": ""}]
+        self.data_client_edit['questions'] *= self.len_questions
 
-        self.data_questions_show = self.data['questions']
+        self.data_questions_show = self.data['questions'] #contain list question
+
+        self.current_question = 0
         self.setupUI()
 
     def setupUI(self):
         self.questionVar = StringVar()
         self.questionVar.set(self.data_questions_show[0]["question"])
-        self.question = Label(self, textvariable=self.questionVar)
+
+        self.question = Label(self)
+        self.question['textvariable'] = self.questionVar
         self.question.pack(anchor='w')
 
         self.ticked = StringVar()
+        self.listAnswersRadiobutton = [] # [<ans radiobutton obj>, <ans radiobutton obj>,...]
+        self.listTextVariable = []
         for answer in self.data_questions_show[0]['answers']:
             ans_index = self.data_questions_show[0]['answers'].index(answer)
             names = tuple(string.ascii_uppercase)
             ans_name = names[ans_index]
 
             ans = Radiobutton(self)
-            ans['text'] = answer['content']
+
+            textvar = StringVar()
+            textvar.set(answer['content'])
+            self.listTextVariable.append(textvar)
+
+            ans['textvariable'] = textvar
             ans['variable'] = self.ticked
             ans['command'] = self.setStateQuestion
             ans['value'] = ans_name
 
+            # add image for answer
             if answer['image'] != '' and os.path.exists(answer['image']):
                 i = Image.open(answer['image'])
                 photo = ImageTk.PhotoImage(i)
@@ -149,25 +140,62 @@ class CenterExam(Frame):
                 ans.config(image=photo)
                 ans.image = photo
 
-            ans.pack(anchor='w')
+            self.listAnswersRadiobutton.append(ans)
+
+        for i in self.listAnswersRadiobutton:
+            i.pack(anchor='w')
 
     def write2File(self):
         pass
 
     def nextQuestion(self):
+        '''Chuyển sang câu hỏi tiếp theo'''
         print('cau tiep theo')
+        self.current_question += 1
+        self.questionVar.set(self.data_questions_show[self.current_question]['question'])
+        amountAnswer = len(self.data_questions_show[self.current_question]['answers'])
+
+        for i in range(amountAnswer):
+            if len(self.listAnswersRadiobutton) == i:
+                ansAddVar = StringVar()
+                ansAddVar.set(self.data_questions_show[self.current_question]['answers'][i]['content'])
+                ansAdd = Radiobutton(self)
+                ansAdd['textvariable'] = ansAddVar
+                ansAdd['value'] = tuple(string.ascii_uppercase)[i]
+                ansAdd['variable'] = self.ticked
+                ansAdd['command'] = self.setStateQuestion
+
+                self.listTextVariable.append(ansAddVar)
+                self.listAnswersRadiobutton.append(ansAdd)
+
+                ansAdd.pack(anchor='w')
+                pass # toi cau hoi co do so luong cau tra loi nhieu hon hoac it hon
+            else:
+                ans = self.data_questions_show[self.current_question]['answers'][i]
+                self.listTextVariable[i].set(ans['content'])
+                if ans['image'] != '' and os.path.exists(ans['image']):
+                    i = Image.open(ans['image'])
+                    photo = ImageTk.PhotoImage(i)
+                    self.listAnswersRadiobutton['image'] = photo
+                    self.image = photo
+
+
+
 
     def previousQuestion(self):
         print('cau truoc')
+        self.current_question -=1
 
     def doneExam(self):
         print('nop bai')
+        self.master.quit()
 
-    def getDataClientSend(self):
+    def sendData2Server(self):
         return self.data_client_edit
 
     def setStateQuestion(self):
-        print('choose')
+        '''Thay đổi trạng thái của câu hỏi'''
+        print(self.ticked.get())
 
 
 class FooterExam(Frame):
@@ -197,7 +225,7 @@ class FooterExam(Frame):
 
 
 if __name__ == '__main__':
-    with open('data_server_send.json', 'r') as f:
+    with open('data_server_send.json', 'r',encoding='utf-8') as f:
         data = json.load(f)
     master = Tk()
     info_exam = InformationExam(master=master, data=data)

@@ -44,7 +44,7 @@
             ]
         },
         {
-            "question": "What is this ?",
+            "question": "where are you ?",
             "images": [
                 {
                     "name": "Image 1",
@@ -75,11 +75,19 @@
                 {
                     "content": "A",
                     "image": "D:/image/...jpg"
+                },
+                {
+                    "content": "đây là câu hỏi vừa thêm",
+                    "image": "D:/image/...jpg"
+                },
+                {
+                    "content": "đây là câu hỏi vừa thêm 2",
+                    "image": "D:/image/...jpg"
                 }
             ]
         },
         {
-            "question": "What is this ?",
+            "question": "how old are you ?",
             "images": [
                 {
                     "name": "Image 1",
