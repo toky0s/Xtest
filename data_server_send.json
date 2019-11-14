@@ -61,27 +61,15 @@
             ],
             "answers": [
                 {
-                    "content": "A",
+                    "content": "computer",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "A",
+                    "content": "keyboard",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "A",
-                    "image": "D:/image/...jpg"
-                },
-                {
-                    "content": "A",
-                    "image": "D:/image/...jpg"
-                },
-                {
-                    "content": "đây là câu hỏi vừa thêm",
-                    "image": "D:/image/...jpg"
-                },
-                {
-                    "content": "đây là câu hỏi vừa thêm 2",
+                    "content": "screen",
                     "image": "D:/image/...jpg"
                 }
             ]
@@ -104,19 +92,19 @@
             ],
             "answers": [
                 {
-                    "content": "A",
+                    "content": "Python",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "A",
+                    "content": "Java",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "A",
+                    "content": "C/C++",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "A",
+                    "content": "C#",
                     "image": "D:/image/...jpg"
                 }
             ]
