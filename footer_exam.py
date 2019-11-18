@@ -1,4 +1,4 @@
-from tkinter import *
+from tkinter import Button, Frame
 from body_exam import CenterExam
 
 
@@ -22,13 +22,13 @@ class FooterExam(Frame):
 
         self.doneButton = Button(self)
         self.doneButton['text'] = 'Done'
-        self.doneButton['command'] = self.center_exam.doneExam
+        self.doneButton['command'] = self.center_exam.checkValid
         self.doneButton.pack(side='right')
 
         self.checkCurrentQuestion()
 
     def checkCurrentQuestion(self):
-        '''Để vô hiệu previous button và next button'''
+        '''Để vô hiệu previous button và next button khi ở đầu và cuối câu hỏi'''
         # print(self.center_exam.current_question)
         if self.center_exam.current_question == 0:
             self.previousButton['state'] = 'disabled'

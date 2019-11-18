@@ -1,10 +1,12 @@
-from tkinter import *
+from tkinter import Frame, Label, StringVar
+from body_exam import CenterExam
 
 class InformationExam(Frame):
 
-    def __init__(self, master, **kw):
+    def __init__(self, master, center_exam:CenterExam,**kw):
         super().__init__(master=master)
         self.master = master
+        self.center_exam = center_exam
         self.data = kw['data']
         self.data['questions']
         self.numberQuestion = len(self.data['questions'])
@@ -50,6 +52,6 @@ class InformationExam(Frame):
         mins, secs = divmod(self.time, 60)
         self.timeVar.set('{:02d}:{:02d}'.format(mins, secs))
         if self.time == 0:
-            print('time out')  # <======== callback
+            self.center_exam.timeOut()  # <======== callback
             return
         self.master.after(1000, self.countdown)
