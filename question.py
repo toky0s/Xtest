@@ -58,3 +58,6 @@ class Answer:
         self.name = name
         self.content = content
         self.image = image
+
+    def __repr__(self):
+        return self.content

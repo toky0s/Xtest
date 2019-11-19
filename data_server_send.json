@@ -5,7 +5,7 @@
         "date": "12/11/2019",
         "name": "Truong A Xin",
         "id": "24211200265",
-        "time": "10"
+        "time": "3600"
     },
     "questions": [
         {
@@ -17,17 +17,17 @@
                 },
                 {
                     "name": "Image 2",
-                    "path": "D/image/2.jpg"
+                    "path": "images/image1.jpg"
                 },
                 {
                     "name": "Image 3",
-                    "path": "D/image/3.jpg"
+                    "path": "images/image2.jpg"
                 }
             ],
             "answers": [
                 {
                     "content": "Pepe",
-                    "image": ""
+                    "image": "images/image2.jpg"
                 },
                 {
                     "content": "Mot thu gi do",

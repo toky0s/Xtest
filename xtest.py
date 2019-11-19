@@ -3,15 +3,17 @@ from header_exam import InformationExam
 from body_exam import CenterExam
 from footer_exam import FooterExam
 from state_exam import StateExam
-
-
 import json
+import logging
 
+# logging.basicConfig(level=logging.INFO)
 if __name__ == '__main__':
     with open('data_server_send.json', 'r',encoding='utf-8') as f:
         data = json.load(f)
     
     master = Tk()
+    # master.state('zoomed') # maximize window
+
     center_exam = CenterExam(master=master, data=data)
     center_exam.grid(row=1, column=0)
 
