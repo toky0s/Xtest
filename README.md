@@ -1,5 +1,5 @@
 # Xtest
-Phần mềm kiểm tra trên máy tính
+Phần mềm kiểm tra trắc nghiệm trên máy tính
 
 ## Xtest được xây dựng dựa trên python tkinter
 ### Cấu trúc của app bao gồm 5 frame đảm nhiệm 5 nhiệm vụ cụ thể là:
