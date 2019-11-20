@@ -1,13 +1,16 @@
 from tkinter import Tk, Radiobutton, Label, Frame, Button, PhotoImage, Canvas, Scrollbar
+from tkinter.ttk import Radiobutton, Label, Frame, Button, Scrollbar
 from tkinter.messagebox import askyesno, showwarning, showinfo
+from PIL import Image, ImageTk
+from question import Question, Answer
+from footer_exam import FooterExam
 import os
 import json
 import string
-from PIL import Image, ImageTk
-from question import Question, Answer
 import logging
 
 def convertObject2Question(question_data, index):
+    logging.info('Convert data from json to Python object')
     index = index
     content = question_data['question']
     images = question_data['images']
@@ -24,8 +27,8 @@ def convertObject2Question(question_data, index):
 
 class ImageObject(Frame):
 
-    def __init__(self, master, name: str, path: str, width: int, **kw):
-        super().__init__(master=master)
+    def __init__(self, master,name: str, path: str, width: int, **kw):
+        super().__init__(master=master, **kw)
         self.name = name
         self.path = path
         self.width = width
@@ -36,9 +39,7 @@ class ImageObject(Frame):
 
         self.image_f = Image.open(self.path)
         self.height = int(self.width*self.image_f.height/self.image_f.width)
-        # The (250, 250) is (height, width)
-        self.image = self.image_f.resize(
-            (self.width, self.height), Image.ANTIALIAS)
+        self.image = self.image_f.resize((self.width, self.height), Image.ANTIALIAS)
 
         self.photo = ImageTk.PhotoImage(self.image)
         self.label_image['image'] = self.photo
@@ -93,16 +94,15 @@ class CenterExam(Frame):
     '''this frame contain questions and render them'''
     # mac dinh data da duoc conver tu json sang object
 
-    def __init__(self, master, **kw):
+    def __init__(self, master, footer_exam: FooterExam, **kw):
         super().__init__(master=master)
         self.master = master
+        self.footer_exam = footer_exam
         self.data = kw['data']
-
-        # object to Question
         self.current_question = 0
+
         # contain Question objects
         self.listQuestionObjects = [convertObject2Question(question_data=question, index=index) for index, question in enumerate(self.data['questions'])]
-        logging.info(self.listQuestionObjects)
         self.setupUI()
 
     def setupUI(self):
@@ -110,6 +110,18 @@ class CenterExam(Frame):
 
     def render(self, question: Question):
         '''render the question object'''
+
+        logging.info(f'render {question}')
+
+        # disable/enable next/previous button
+        # self.footer_exam.nextButton['state']= 'normal'
+        # self.footer_exam.previousButton['state'] = 'normal'
+        # if self.current_question == 0:
+        #     self.footer_exam.previousButton['state'] = 'disabled'
+        # else:
+        #     if self.current_question == self.getAmountQuestion() - 1:
+        #         self.footer_exam.nextButton['state'] = 'disabled'
+
         # delete the previous question if any
         self.listWidgets = self.grid_slaves()
         for widget in self.listWidgets:
@@ -122,14 +134,13 @@ class CenterExam(Frame):
 
         # get list of answers
         self.list_radiobutton = []
-        print(question.answers)
         for answer in question.answers:
             ans = Radiobutton(self)
             ans['text'] = answer.content
             ans['compound'] = 'bottom'
             ans['value'] = answer.name
             ans['variable'] = question.choice
-            ans['command'] = self.setStateQuestionIsMark  # test
+            ans['command'] = self.setStateQuestionIsMark
             if os.path.exists(answer.image):
                 i = Image.open(answer.image)
                 width = 100
@@ -169,16 +180,10 @@ class CenterExam(Frame):
         # check question was sure, didn't
         self.checkIsDisableQuestion()
 
-    def showInfo(self, question: Question):
-        print(question.index)
-        print(question.content)
-        print(question.images)
-        print(question.answers)
-        print(question.choice.get())
-        print(question.state)
 
-    def nextQuestion(self):  # done
-        logging.info('next question')
+    def nextQuestion(self):
+        '''go to next question'''
+        logging.info(f'next question -> {self.listQuestionObjects[self.current_question + 1]}')
         self.current_question += 1
         self.listWidgets = self.pack_slaves()
         for widget in self.listWidgets:
@@ -186,7 +191,8 @@ class CenterExam(Frame):
         self.render(self.listQuestionObjects[self.current_question])
 
     def previousQuestion(self):
-        logging.info('previous question')
+        '''go to previous question'''
+        logging.info(f'previous question -> {self.listQuestionObjects[self.current_question - 1]}')
         self.current_question -= 1
         self.listWidgets = self.pack_slaves()
         for widget in self.listWidgets:
@@ -196,19 +202,15 @@ class CenterExam(Frame):
     def allIs(self, value, can_loop):
         '''If all question is mark, it will return True'''
         for i in can_loop:
-            print('ok',i)
             if i != value:
                 return False
         return True
 
     def getAmountQuestionStateMark(self):
-        return sum(question.state == 'mark' for question in self.listQuestionObjects)
-
-    def getAmountQuestionStateNo(self):
-        return sum(question.state == 'no' for question in self.listQuestionObjects)
+        return [question.state == 'mark' for question in self.listQuestionObjects].count(True)
 
     def getAmountQuestionStateDone(self):
-        return sum(question.state == 'done' for question in self.listQuestionObjects)
+        return [question.state == 'sure' for question in self.listQuestionObjects].count(True)
 
     def checkValid(self):
         logging.info('check valid exam')
@@ -219,28 +221,33 @@ class CenterExam(Frame):
 
         # check all is mark or mark + sure = totalAmountQuestion
         all_is_mark = self.allIs('mark', [i.state for i in self.listQuestionObjects])
-        all_is_mark_or_and_sure = self.getAmountQuestionStateMark() + self.getAmountQuestionStateDone() == len(self.listQuestionObjects) and self.getAmountQuestionStateMark() != 0
+        all_is_mark_or_and_sure = (self.getAmountQuestionStateMark() + self.getAmountQuestionStateDone() == len(self.listQuestionObjects)) and self.getAmountQuestionStateMark() != 0
         if all_is_mark or all_is_mark_or_and_sure:
             if askyesno('Warning', 'Do you want to Sure all and Finish this exam!'):
                 for question in self.listQuestionObjects:
                     question.state = 'sure'
                 self.doneExam()
             return
+        logging.info('check fail')
+        logging.info(f'all_is_mark {all_is_mark}')
+        logging.info(f'all_is_mark {all_is_mark_or_and_sure}')
 
     def doneExam(self):
+        '''finish the exam and send data to server'''
+        logging.info('finish the exam and send data to server')
         # send data to server
         answers = [question.getAnswer() for question in self.listQuestionObjects]
         logging.info(f'Done exam {answers}')
         self.master.quit()
 
     def timeOut(self):
+        '''when time was out, it would call self.doneExam()'''
         logging.info('Time out, your results will be sent to the server!')
         self.doneExam()
 
     def checkIsDisableQuestion(self):
         '''when this question was sure, it would disable the question'''
         if self.listQuestionObjects[self.current_question].state == 'sure':
-            logging.info(f'Disable question {self.listQuestionObjects[self.current_question]}')
             self.label_question['state'] = 'disabled'
             for radiobutton in self.list_radiobutton:
                 radiobutton['state'] = 'disabled'
@@ -248,10 +255,11 @@ class CenterExam(Frame):
         self.after(100, self.checkIsDisableQuestion)
 
     def setStateQuestionIsMark(self):
-        logging.info(f'change the state of question {self.listQuestionObjects[self.current_question]} to MARK')
+        logging.info(f'change the state of {self.listQuestionObjects[self.current_question]} to MARK -> {self.listQuestionObjects[self.current_question].getAnswer()}')
         self.listQuestionObjects[self.current_question].changeState2Mark()
 
     def setStateQuestionIsSure(self):
+        logging.info('check if the question has been marked')
         if self.listQuestionObjects[self.current_question].getAnswer() == '':
             showwarning('Warning', 'You have not answered this question!')
             return
@@ -259,11 +267,7 @@ class CenterExam(Frame):
             logging.info(f'change the state of question {self.listQuestionObjects[self.current_question]} to SURE')
             self.listQuestionObjects[self.current_question].changeState2Sure()
 
+    def getAmountQuestion(self):
+        '''return amount question'''
+        return len(self.listQuestionObjects)
 
-if __name__ == '__main__':
-    with open('data_server_send.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    master = Tk()
-    a = CenterExam(master, data=data)
-    a.pack(anchor='w')
-    master.mainloop()

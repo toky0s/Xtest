@@ -1,4 +1,5 @@
 from tkinter import Canvas, Button, Label, Frame, Tk, Scrollbar, PhotoImage
+from tkinter.ttk import  Button, Label, Frame, Scrollbar
 from question import Question
 from body_exam import CenterExam
 
@@ -42,9 +43,12 @@ class StatusButton(Frame):
         self.statusIcon.bind('<ButtonRelease-1>', self.releaseMouse)
 
     def gotoQuestion(self,event):
+        # check if the current question == question -> Do not render()
+        if self.center_exam.current_question == self.question.index:
+            return
+
         self['relief'] = 'groove'
         self.center_exam.current_question=self.question.index
-        print('go to question', self.question.index)
         self.center_exam.render(self.question)
 
 
@@ -90,10 +94,12 @@ class StateExam(Frame):
             b.pack(fill='x')
 
     def checkQuestionState(self):
-        self.icons = {'no':'icon/question-24.png','mark':'icon/save-24.png','sure':'icon/tick-24.png'}
+        '''continuously check the status of questions to display the appropriate icon'''
+        
+        self.icons = {'no':'icon/question-24.png','mark':'icon/flag.png','sure':'icon/tick-24.png'}
         for b in self.listStateButton:
             b.answer['text'] = b.question.getAnswer()
             photo = PhotoImage(file=self.icons[b.question.state])
             b.statusIcon['image'] = photo
             b.statusIcon.image = photo
-        self.master.after(100, self.checkQuestionState)
+        self.master.after(1, self.checkQuestionState)

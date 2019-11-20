@@ -1,4 +1,5 @@
-from tkinter import Frame, Label, StringVar
+from tkinter import StringVar
+from tkinter.ttk import Frame, Label
 from body_exam import CenterExam
 
 class InformationExam(Frame):
@@ -20,30 +21,28 @@ class InformationExam(Frame):
         self.setupUI()
 
     def setupUI(self):
-        self.currentQuestionVar = StringVar()
-        self.currentQuestionVar.set(f'1/{self.numberQuestion}')
-        self.currentQuestion = Label(
-            self, textvariable=self.currentQuestionVar)
-        self.currentQuestion.pack(side='left')
+        self.currentQuestion = Label(self)
+        self.currentQuestion['text'] = f'Số câu hỏi: {self.center_exam.getAmountQuestion()}'
+        self.currentQuestion.grid(column=0, row=0)
 
         self.testRoom = Label(self, text=self.room)
-        self.testRoom.pack(side='left')
+        self.testRoom.grid(column=1, row=0)
 
         self.testDate = Label(self, text=self.date)
-        self.testDate.pack(side='left')
+        self.testDate.grid(column=2, row=0)
 
         self.studentName = Label(self, text=self.name)
-        self.studentName.pack(side='left')
+        self.studentName.grid(column=3, row=0)
 
         self.studentId = Label(self, text=self.id)
-        self.studentId.pack(side='left')
+        self.studentId.grid(column=4, row=0)
 
         self.testSubject = Label(self, text=self.subject)
-        self.testSubject.pack(side='left')
+        self.testSubject.grid(column=5, row=0)
 
         self.timeVar = StringVar()
         self.testTime = Label(self, textvariable=self.timeVar)
-        self.testTime.pack(side='left')
+        self.testTime.grid(column=6, row=0)
 
         self.countdown()
 
@@ -52,6 +51,6 @@ class InformationExam(Frame):
         mins, secs = divmod(self.time, 60)
         self.timeVar.set('{:02d}:{:02d}'.format(mins, secs))
         if self.time == 0:
-            self.center_exam.timeOut()  # <======== callback
+            self.center_exam.timeOut()
             return
         self.master.after(1000, self.countdown)

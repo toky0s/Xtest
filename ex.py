@@ -1,64 +1,43 @@
-from tkinter import Canvas, Button, Label, Frame, Tk, Scrollbar, GROOVE
+# import Tkinter as tk      # py2
+import tkinter as tk    # py3
 
-def data():
-    for i in range(50):
-       Label(frame,text=i).grid(row=i,column=0)
-       Label(frame,text="my text"+str(i)).grid(row=i,column=1)
-       Label(frame,text="..........").grid(row=i,column=2)
+class Example(tk.Frame):
+    def __init__(self, parent):
+        tk.Frame.__init__(self, parent)
+        f1 = GradientFrame(self, borderwidth=1, relief="sunken")
+        f2 = GradientFrame(self, "green", "blue", borderwidth=1, relief="sunken")
+        f1.pack(side="top", fill="both", expand=True)
+        f2.pack(side="bottom", fill="both", expand=True)
 
-def myfunction(event):
-    canvas.configure(scrollregion=canvas.bbox("all"),width=200,height=200)
-    canvas['background'] = 'red'
+class GradientFrame(tk.Canvas):
+    '''A gradient frame which uses a canvas to draw the background'''
+    def __init__(self, parent, color1="red", color2="black", **kwargs):
+        tk.Canvas.__init__(self, parent, **kwargs)
+        self._color1 = color1
+        self._color2 = color2
+        self.bind("<Configure>", self._draw_gradient)
 
-root=Tk()
-sizex = 280
-sizey = 250
-posx  = 100
-posy  = 100
-root.wm_geometry("%dx%d+%d+%d" % (sizex, sizey, posx, posy))
+    def _draw_gradient(self, event=None):
+        '''Draw the gradient'''
+        self.delete("gradient")
+        width = self.winfo_width()
+        height = self.winfo_height()
+        limit = width
+        (r1,g1,b1) = self.winfo_rgb(self._color1)
+        (r2,g2,b2) = self.winfo_rgb(self._color2)
+        r_ratio = float(r2-r1) / limit
+        g_ratio = float(g2-g1) / limit
+        b_ratio = float(b2-b1) / limit
 
-myframe=Frame(root,relief=GROOVE,bd=1)
-myframe.place(x=10,y=10)
+        for i in range(limit):
+            nr = int(r1 + (r_ratio * i))
+            ng = int(g1 + (g_ratio * i))
+            nb = int(b1 + (b_ratio * i))
+            color = "#%4.4x%4.4x%4.4x" % (nr,ng,nb)
+            self.create_line(i,0,i,height, tags=("gradient",), fill=color)
+        self.lower("gradient")
 
-canvas=Canvas(myframe)
-frame=Frame(canvas)
-frame['background'] = 'green'
-myscrollbar=Scrollbar(myframe,orient="vertical",command=canvas.yview)
-canvas.configure(yscrollcommand=myscrollbar.set)
-
-myscrollbar.pack(side="right",fill="y")
-canvas.pack(side="left")
-canvas.create_window((0,0),window=frame,anchor='nw')
-frame.bind("<Configure>",myfunction)
-data()
-root.mainloop()
-
-# import string
-# from question import Question, Answer
-# import json
-
-
-# def convertObject2Question(question_data, index):
-#     index = index
-#     content = question_data['question']
-#     images = question_data['images']
-#     answers = []
-#     for i in range(len(question_data['answers'])):
-#         answer = question_data['answers'][i]
-#         name = list(string.ascii_uppercase)[i]
-#         content_ans = answer['content']
-#         image_ans = answer['image']
-#         ans = Answer(name=name,content=content_ans, image=image_ans)
-#         answers.append(ans)
-#     return Question(index=index,content=content, images=images, answers=answers)
-
-# with open('data_server_send.json', 'r',encoding='utf-8') as f:
-#     data = json.load(f)
-
-# q = data['questions']
-# lQuestions = [convertObject2Question(question_data=question, index=index) for index,question in enumerate(q)] 
-
-# print(lQuestions)
-# lQuestions[0].showQuestion()
-# lQuestions[1].showQuestion()
-# lQuestions[2].showQuestion()
+if __name__ == "__main__":
+    root = tk.Tk()
+    Example(root).pack(fill="both", expand=True)
+    root.mainloop()
