@@ -2,17 +2,19 @@ import json
 import string
 from tkinter import Radiobutton, Label, StringVar
 from PIL import Image, ImageTk
+import logging
 
 
 class Question:
 
     # mac dinh json data da duoc convert sang object trong python
-    def __init__(self, index: int, content: str, images=[], answers=[]):
+    def __init__(self,master, index: int, content: str, images=[], answers=[]):
+        self.master = master
         self.index = index
         self.content = content
         self.images = images
         self.answers = answers # [Answer object]
-        self.choice = StringVar()
+        self.choice = StringVar(master=self.master)
         self.state = 'no'  # mark, sure, no
 
     def __repr__(self):
@@ -61,3 +63,19 @@ class Answer:
 
     def __repr__(self):
         return self.content
+
+        
+def convertObject2Question(master,question_data, index):
+    logging.info('Convert data from json to Python object')
+    index = index
+    content = question_data['question']
+    images = question_data['images']
+    answers = []
+    for i in range(len(question_data['answers'])):
+        answer = question_data['answers'][i]
+        name = list(string.ascii_uppercase)[i]
+        content_ans = answer['content']
+        image_ans = answer['image']
+        ans = Answer(name=name, content=content_ans, image=image_ans)
+        answers.append(ans)
+    return Question(master=master,index=index, content=content, images=images, answers=answers)

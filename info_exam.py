@@ -1,6 +1,7 @@
 from tkinter import StringVar
 from tkinter.ttk import Frame, Label
-from body_exam import CenterExam
+from center_exam import CenterExam
+import time
 
 class InformationExam(Frame):
 
@@ -44,13 +45,16 @@ class InformationExam(Frame):
         self.testTime = Label(self, textvariable=self.timeVar)
         self.testTime.grid(column=6, row=0)
 
-        self.countdown()
+        # self.countdown()
 
     def countdown(self):
-        self.time -= 1
-        mins, secs = divmod(self.time, 60)
-        self.timeVar.set('{:02d}:{:02d}'.format(mins, secs))
-        if self.time == 0:
-            self.center_exam.timeOut()
-            return
-        self.master.after(1000, self.countdown)
+        '''Start countdown'''
+        while self.time>=0:
+            mins, secs = divmod(self.time, 60)
+            self.timeVar.set('{:02d}:{:02d}'.format(mins, secs))
+            time.sleep(1)
+            self.time -= 1
+
+        self.center_exam.doneExam()
+
+        # self.master.after(1000, self.countdown)

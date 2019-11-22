@@ -2,27 +2,11 @@ from tkinter import Tk, Radiobutton, Label, Frame, Button, PhotoImage, Canvas, S
 from tkinter.ttk import Radiobutton, Label, Frame, Button, Scrollbar
 from tkinter.messagebox import askyesno, showwarning, showinfo
 from PIL import Image, ImageTk
-from question import Question, Answer
-from footer_exam import FooterExam
+from question import Question, Answer, convertObject2Question
 import os
 import json
 import string
 import logging
-
-def convertObject2Question(question_data, index):
-    logging.info('Convert data from json to Python object')
-    index = index
-    content = question_data['question']
-    images = question_data['images']
-    answers = []
-    for i in range(len(question_data['answers'])):
-        answer = question_data['answers'][i]
-        name = list(string.ascii_uppercase)[i]
-        content_ans = answer['content']
-        image_ans = answer['image']
-        ans = Answer(name=name, content=content_ans, image=image_ans)
-        answers.append(ans)
-    return Question(index=index, content=content, images=images, answers=answers)
 
 
 class ImageObject(Frame):
@@ -94,15 +78,14 @@ class CenterExam(Frame):
     '''this frame contain questions and render them'''
     # mac dinh data da duoc conver tu json sang object
 
-    def __init__(self, master, footer_exam: FooterExam, **kw):
+    def __init__(self, master, **kw):
         super().__init__(master=master)
         self.master = master
-        self.footer_exam = footer_exam
         self.data = kw['data']
         self.current_question = 0
 
         # contain Question objects
-        self.listQuestionObjects = [convertObject2Question(question_data=question, index=index) for index, question in enumerate(self.data['questions'])]
+        self.listQuestionObjects = [convertObject2Question(master=self.master,question_data=question, index=index) for index, question in enumerate(self.data['questions'])]
         self.setupUI()
 
     def setupUI(self):
@@ -179,7 +162,6 @@ class CenterExam(Frame):
 
         # check question was sure, didn't
         self.checkIsDisableQuestion()
-
 
     def nextQuestion(self):
         '''go to next question'''
