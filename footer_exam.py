@@ -72,4 +72,4 @@ class FooterExam(Frame):
                     self.master.bind('<Left>', lambda event: self.center_exam.previousQuestion())
                     self.nextButton['state'] = 'normal'
         
-        # self.after(1000, self.checkCurrentQuestion)
+        

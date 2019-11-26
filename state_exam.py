@@ -105,8 +105,6 @@ class StateExam(Frame):
         self.canvas.create_window((0,0), window=self.frame, anchor='center')
         self.addStatusButton()
 
-        # self.checkQuestionState()
-
     def resizeCanvas(self,event):
         self.canvas['scrollregion'] = self.canvas.bbox('all') # width button inside and height is center_exam's height
         self.canvas['width'] = event.width
@@ -128,4 +126,4 @@ class StateExam(Frame):
                 photo = PhotoImage(file=self.icons[b.question.state])
                 b.statusIcon['image'] = photo
                 b.statusIcon.image = photo
-        # self.master.after(1, self.checkQuestionState)
+        

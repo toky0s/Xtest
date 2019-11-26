@@ -45,8 +45,6 @@ class InformationExam(Frame):
         self.testTime = Label(self, textvariable=self.timeVar)
         self.testTime.grid(column=6, row=0)
 
-        # self.countdown()
-
     def countdown(self):
         '''Start countdown'''
         while self.time>=0:
@@ -56,5 +54,3 @@ class InformationExam(Frame):
             self.time -= 1
 
         self.center_exam.doneExam()
-
-        # self.master.after(1000, self.countdown)

@@ -78,10 +78,10 @@ class CenterExam(Frame):
     '''this frame contain questions and render them'''
     # mac dinh data da duoc conver tu json sang object
 
-    def __init__(self, master, **kw):
+    def __init__(self, master, data, **kw):
         super().__init__(master=master)
         self.master = master
-        self.data = kw['data']
+        self.data = data
         self.current_question = 0
 
         # contain Question objects
@@ -96,18 +96,8 @@ class CenterExam(Frame):
 
         logging.info(f'render {question}')
 
-        # disable/enable next/previous button
-        # self.footer_exam.nextButton['state']= 'normal'
-        # self.footer_exam.previousButton['state'] = 'normal'
-        # if self.current_question == 0:
-        #     self.footer_exam.previousButton['state'] = 'disabled'
-        # else:
-        #     if self.current_question == self.getAmountQuestion() - 1:
-        #         self.footer_exam.nextButton['state'] = 'disabled'
-
         # delete the previous question if any
-        self.listWidgets = self.grid_slaves()
-        for widget in self.listWidgets:
+        for widget in self.grid_slaves():
             widget.destroy()
 
         # render question
@@ -141,7 +131,6 @@ class CenterExam(Frame):
             self.list_radiobutton[i].grid(row=i+1, column=0, sticky='w')
 
         # render frame which contains images of question
-        # logging.info(self.allIs(True,[os.path.exists(i['path']) for i in question.images]))
         if self.allIs(True,[os.path.exists(i['path']) for i in question.images]):
             self.frame_images_of_question = ImageQuestionContainer(self, question.images)
             location_column_frame_images_of_question = len(self.grid_slaves())
@@ -160,8 +149,12 @@ class CenterExam(Frame):
         location_row = len(self.grid_slaves())
         self.button_sure.grid(row=location_row, column=0)
 
-        # check question was sure, didn't
-        self.checkIsDisableQuestion()
+        # render the disabled question
+        if question.state == 'sure':
+            self.label_question['state'] = 'disabled'
+            for radiobutton in self.list_radiobutton:
+                radiobutton['state'] = 'disabled'
+            self.button_sure['state'] = 'disabled'
 
     def nextQuestion(self):
         '''go to next question'''
@@ -227,15 +220,6 @@ class CenterExam(Frame):
         logging.info('Time out, your results will be sent to the server!')
         self.doneExam()
 
-    def checkIsDisableQuestion(self):
-        '''when this question was sure, it would disable the question'''
-        if self.listQuestionObjects[self.current_question].state == 'sure':
-            self.label_question['state'] = 'disabled'
-            for radiobutton in self.list_radiobutton:
-                radiobutton['state'] = 'disabled'
-            self.button_sure['state'] = 'disabled'
-        self.after(100, self.checkIsDisableQuestion)
-
     def setStateQuestionIsMark(self):
         logging.info(f'change the state of {self.listQuestionObjects[self.current_question]} to MARK -> {self.listQuestionObjects[self.current_question].getAnswer()}')
         self.listQuestionObjects[self.current_question].changeState2Mark()
@@ -248,6 +232,13 @@ class CenterExam(Frame):
         if askyesno('Sure this question', 'Are you sure?'):
             logging.info(f'change the state of question {self.listQuestionObjects[self.current_question]} to SURE')
             self.listQuestionObjects[self.current_question].changeState2Sure()
+
+            # disable that question
+            # render the disabled question
+            self.label_question['state'] = 'disabled'
+            for radiobutton in self.list_radiobutton:
+                radiobutton['state'] = 'disabled'
+            self.button_sure['state'] = 'disabled'
 
     def getAmountQuestion(self):
         '''return amount question'''
