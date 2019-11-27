@@ -517,14 +517,15 @@ class App():
                 self.master.quit()
         elif [question.state for question in self.listQuestionObjects].count('mark') + [question.state for question in self.listQuestionObjects].count('sure') == self.getAmountQuestion():
             if askyesno('Thông báo','Bạn có muốn chốt tất cả các câu hỏi còn lại và nộp bài không?'):
-                logging.info(f'{[question.getAnswer() for question in self.listQuestionObjects]}')
+                logging.info(self.getAllAnswers())
                 self.master.quit()
         else:
             unanswered_question = ', '.join([str(question.index) for question in self.listQuestionObjects if question.state == 'no'])
             showwarning('Cảnh báo',f'Bạn chưa trả lời {self.getAmountUnansweredQuestion()} câu hỏi, đó là {unanswered_question}')
 
     def timeOut(self):
-        pass
+        showwarning('Hết giờ','Đã hết giờ, đáp án của bạn sẽ được gửi lên server, chờ một chút để có được điểm của mình!')
+        logging.info(self.getAllAnswers())
 
     def getAmountUnansweredQuestion(self):
         return [question.state for question in self.listQuestionObjects].count('no')
@@ -534,6 +535,10 @@ class App():
 
     def getAmountCompletedQuestion(self):
         return [question.state for question in self.listQuestionObjects].count('sure')
+
+    def getAllAnswers(self)->list:
+        '''Trả về một list chứa đáp án'''
+        return [question.getAnswer() for question in self.listQuestionObjects]
 
     def run(self):
         self.master.mainloop()
