@@ -186,10 +186,12 @@ class FooterExam(Frame):
 
 class InformationExam(Frame):
 
-    def __init__(self, master, data, **kw):
+    def __init__(self, master, data, callback, **kw):
         super().__init__(master=master)
         self.master = master
         self.data = data
+        self.callback =callback
+
         self.data['questions']
         self.numberQuestion = len(self.data['questions'])
         self.room = self.data['informations']['room']
@@ -226,12 +228,14 @@ class InformationExam(Frame):
         self.testTime.grid(column=6, row=0)
 
     def countdown(self):
-        '''Start countdown'''
+        '''Đếm ngược thời gian'''
         while self.time >= 0:
             mins, secs = divmod(self.time, 60)
             self.timeVar.set('{:02d}:{:02d}'.format(mins, secs))
             time.sleep(1)
             self.time -= 1
+        self.callback()
+        return
 
 
 class ImageObject(Frame):
@@ -296,8 +300,7 @@ class ImageQuestionContainer(Frame):
 
     def addStatusButton(self):
         for image in self.images:
-            b = ImageObject(
-                self.frame, name=image['name'], path=image['path'], width=500)
+            b = ImageObject(self.frame, name=image['name'], path=image['path'], width=500)
             b.pack(fill='x')
 
 
@@ -431,7 +434,7 @@ class App():
         self.center_exam = CenterExam(master=self.master, listQuestionObjects=self.listQuestionObjects, radioCallback=self.changeSateQuestionToMark, sureCallback=self.changeStateQuestionToSure)
         self.center_exam.grid(row=1, column=0)
 
-        self.info_exam = InformationExam(master=self.master,data=self.data)
+        self.info_exam = InformationExam(master=self.master,data=self.data, callback=self.timeOut)
         self.info_exam.grid(row=0, column=0, columnspan=2)
         self.infoThread = MyInfoExamThread(name='Thread Information Exam', info_exam=self.info_exam)
         self.infoThread.daemon = True
@@ -526,6 +529,7 @@ class App():
     def timeOut(self):
         showwarning('Hết giờ','Đã hết giờ, đáp án của bạn sẽ được gửi lên server, chờ một chút để có được điểm của mình!')
         logging.info(self.getAllAnswers())
+        self.master.quit()
 
     def getAmountUnansweredQuestion(self):
         return [question.state for question in self.listQuestionObjects].count('no')
