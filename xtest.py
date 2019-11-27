@@ -123,6 +123,7 @@ class StatusButton(Button):
         self['image'] = self.photo
         self.image = self.photo
 
+
 class StateExam(Frame):
 
     def __init__(self, master, listQuestionObjects:list, callback,**kw):
@@ -385,8 +386,6 @@ class CenterExam(Frame):
             for radiobutton in self.list_radiobutton:
                 radiobutton['state'] = 'disabled'
             self.button_sure['state'] = 'disabled'
-
-
 
 
 class MyInfoExamThread(threading.Thread):

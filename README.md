@@ -8,3 +8,5 @@ Phần mềm kiểm tra trắc nghiệm trên máy tính
 3. **StateExam class**: Hiển thị list câu hỏi.
 4. **FooterExam class**: Các button tương tác ở phần footer.
 
+## Một số hình ảnh của em nó
+![Demo 1](images/Capture.PNG?raw=true "Demo 1")
