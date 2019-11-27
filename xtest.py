@@ -498,6 +498,15 @@ class App():
             return
         logging.info(f'go to question {index}')
         self.currentQuestion = index
+        if self.currentQuestion == 0:
+            self.footer_exam.previousButton['state'] = 'disabled'
+            self.footer_exam.nextButton['state'] = 'normal'
+        elif self.currentQuestion == self.getAmountQuestion()-1:
+            self.footer_exam.previousButton['state'] = 'normal'
+            self.footer_exam.nextButton['state'] = 'disabled'
+        else:
+            self.footer_exam.previousButton['state'] = 'normal'
+            self.footer_exam.nextButton['state'] = 'normal'
         self.center_exam.render(self.listQuestionObjects[index])
 
     def doneExam(self):
