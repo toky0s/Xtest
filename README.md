@@ -10,3 +10,7 @@ Phần mềm kiểm tra trắc nghiệm trên máy tính
 
 ## Một số hình ảnh của em nó
 ![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture.PNG?raw=true "Demo 1")
+![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture1.PNG?raw=true "Demo 2")
+![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture2.PNG?raw=true "Demo 3")
+![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture3.PNG?raw=true "Demo 4")
+![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture4.PNG?raw=true "Demo 5")
