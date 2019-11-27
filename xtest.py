@@ -1,6 +1,6 @@
-from tkinter import *
-from tkinter.messagebox import *
-from tkinter.ttk import *
+from tkinter import Tk, Frame, StringVar, PhotoImage, Canvas
+from tkinter.messagebox import askyesno, showwarning
+from tkinter.ttk import Label, Button, Radiobutton, Scrollbar, Frame
 # from info_exam import InformationExam
 # from center_exam import CenterExam
 # from footer_exam import FooterExam

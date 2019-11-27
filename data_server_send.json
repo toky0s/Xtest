@@ -44,7 +44,7 @@
             ]
         },
         {
-            "question": "where are you ?",
+            "question": "Con nào dưới đây có bốn chân ?",
             "images": [
                 {
                     "name": "Image 1",
@@ -61,21 +61,25 @@
             ],
             "answers": [
                 {
-                    "content": "computer",
+                    "content": "Con gà",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "keyboard",
+                    "content": "Con cá",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "screen",
+                    "content": "Con Rắn",
+                    "image": "D:/image/...jpg"
+                },
+                {
+                    "content": "Con Bò",
                     "image": "D:/image/...jpg"
                 }
             ]
         },
         {
-            "question": "how old are you ?",
+            "question": "Đâu là một ngôn ngữ lập trình ?",
             "images": [
                 {
                     "name": "Image 1",
@@ -92,25 +96,25 @@
             ],
             "answers": [
                 {
-                    "content": "Python",
+                    "content": "JAV",
+                    "image": "D:/image/...jpg"
+                },
+                {
+                    "content": "Jvevermind",
+                    "image": "D:/image/...jpg"
+                },
+                {
+                    "content": "J.K Rowling",
                     "image": "D:/image/...jpg"
                 },
                 {
                     "content": "Java",
                     "image": "D:/image/...jpg"
-                },
-                {
-                    "content": "C/C++",
-                    "image": "D:/image/...jpg"
-                },
-                {
-                    "content": "C#",
-                    "image": "D:/image/...jpg"
                 }
             ]
         },
         {
-            "question": "hey men ?",
+            "question": "Đâu là khẳng định đúng ?",
             "images": [
                 {
                     "name": "Image 1",
@@ -127,54 +131,46 @@
             ],
             "answers": [
                 {
-                    "content": "hello",
+                    "content": "Javascript giống Java",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "bye",
+                    "content": "Python giống CPython",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "ok",
+                    "content": "C/C++ là một",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "dcm",
+                    "content": "Edge dùng để tải Chrome",
                     "image": "D:/image/...jpg"
                 }
             ]
         },
         {
-            "question": "hey men ?",
+            "question": "Đây là quốc kỳ nước nào ?",
             "images": [
                 {
                     "name": "Image 1",
-                    "path": "D/image/1.jpg"
-                },
-                {
-                    "name": "Image 2",
-                    "path": "D/image/2.jpg"
-                },
-                {
-                    "name": "Image 3",
-                    "path": "D/image/3.jpg"
+                    "path": "D:/downloads/danmach.jpg"
                 }
             ],
             "answers": [
                 {
-                    "content": "hello",
+                    "content": "Đan Mạch",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "bye",
+                    "content": "Hà Lan",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "ok",
+                    "content": "Thụy Điển",
                     "image": "D:/image/...jpg"
                 },
                 {
-                    "content": "dcm",
+                    "content": "Anh",
                     "image": "D:/image/...jpg"
                 }
             ]

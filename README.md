@@ -7,5 +7,4 @@ Phần mềm kiểm tra trắc nghiệm trên máy tính
 2. **CenterExam class**: Hiển thị câu hỏi, hiển thị hình ảnh.
 3. **StateExam class**: Hiển thị list câu hỏi.
 4. **FooterExam class**: Các button tương tác ở phần footer.
-### Giao tiếp
-Các class chủ yếu sẽ giao tiếp với CenterExam class, để tương tác và hiển thị câu hỏi.
+
