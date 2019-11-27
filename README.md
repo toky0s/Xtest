@@ -9,4 +9,4 @@ Phần mềm kiểm tra trắc nghiệm trên máy tính
 4. **FooterExam class**: Các button tương tác ở phần footer.
 
 ## Một số hình ảnh của em nó
-![Demo 1](images/Capture.PNG?raw=true "Demo 1")
+![Demo 1](https://github.com/truongaxin123/Xtest/blob/master/images/Capture.PNG "Demo 1")
